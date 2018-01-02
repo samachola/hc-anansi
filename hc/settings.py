@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 import os
 import warnings
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -87,6 +88,9 @@ DATABASES = {
         'NAME':   './hc.sqlite',
     }
 }
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
