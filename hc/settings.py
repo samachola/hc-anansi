@@ -20,7 +20,7 @@ HOST = "localhost"
 SECRET_KEY = "---"
 DEBUG = True
 ALLOWED_HOSTS = []
-DEFAULT_FROM_EMAIL = 'healthchecks@example.org'
+DEFAULT_FROM_EMAIL = 'hc-anansi@null.net'
 USE_PAYMENTS = False
 
 
@@ -89,8 +89,6 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
@@ -113,6 +111,13 @@ if os.environ.get("DB") == "mysql":
             'TEST': {'CHARSET': 'UTF8'}
         }
     }
+
+# If deploying to heroku, the database config will be populated automatically
+# Create an environment variable HEROKU_DEPLOYMENT in heroku and set it to 1
+if os.environ.get("HEROKU_DEPLOYMENT") == 1:
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
+
 
 LANGUAGE_CODE = 'en-us'
 
