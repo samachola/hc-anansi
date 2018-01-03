@@ -135,6 +135,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 COMPRESS_OFFLINE = True
 
 EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
