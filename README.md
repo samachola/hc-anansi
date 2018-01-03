@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/andela/hc-anansi.svg?branch=ch-integrations)](https://travis-ci.org/andela/hc-anansi) [![Coverage Status](https://coveralls.io/repos/github/andela/hc-anansi/badge.svg)](https://coveralls.io/github/andela/hc-anansi) [![Maintainability](https://api.codeclimate.com/v1/badges/05bc00c4c66c64132a17/maintainability)](https://codeclimate.com/github/andela/hc-anansi/maintainability) [![CircleCI](https://circleci.com/gh/andela/hc-anansi.svg?style=svg)](https://circleci.com/gh/andela/hc-anansi)
+
 # healthchecks
 
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
