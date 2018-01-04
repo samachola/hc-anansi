@@ -16,9 +16,13 @@ pbr==3.1.1
 premailer==2.9.6
 psycopg2==2.7.3.2
 <<<<<<< HEAD
+<<<<<<< HEAD
 rcssmin==1.0.6
 =======
 >>>>>>> [ADD] TravisCI Slack notifications (#1)
+=======
+rcssmin==1.0.6
+>>>>>>> 71cd42018643cc4747cdc0cfdaf5080e652a61f6
 requests==2.9.1
 rjsmin==1.0.12
 six==1.11.0
