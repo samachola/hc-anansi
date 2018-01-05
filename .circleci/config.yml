@@ -44,6 +44,7 @@ jobs:
           command: |
             . venv/bin/activate
             python manage.py migrate
+            python manage.py collectstatic --noinput
             python manage.py test
             coverage run --omit="*/tests/*" --source=hc manage.py test
             COVERALLS_REPO_TOKEN=iXhhtz0pTXcDFSpDPfGLL2UirogDXEKXl coveralls
