@@ -1,0 +1,6 @@
+- pip install flake8
+
+- navigate to .git/hooks and paste the pre-commit file.
+- save. 
+
+// Go Ye and Awesome
