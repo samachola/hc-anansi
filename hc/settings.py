@@ -115,10 +115,10 @@ if os.environ.get("DB") == "mysql":
 
 # If deploying to heroku, the database config will be populated automatically
 # Create an environment variable HEROKU_DEPLOYMENT in heroku and set it to 1
-if os.environ.get("HEROKU_DEPLOYMENT") == 1:
-    db_from_env = dj_database_url.config()
-    DATABASES['default'].update(db_from_env)
-
+if os.environ.get("HEROKU_DEPLOYMENT") == '1':
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
 
 LANGUAGE_CODE = 'en-us'
 
