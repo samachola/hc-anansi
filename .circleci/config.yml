@@ -7,7 +7,7 @@ jobs:
       - image: circleci/python:3.6.4
         environment:
         - DJANGO_SETTINGS_MODULE: hc.settings
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -37,13 +37,14 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-        
+
       # run tests!
       - run:
           name: run tests
           command: |
             . venv/bin/activate
             python manage.py migrate
+            python manage.py collectstatic --noinput
             python manage.py test
             coverage run --omit="*/tests/*" --source=hc manage.py test
             COVERALLS_REPO_TOKEN=iXhhtz0pTXcDFSpDPfGLL2UirogDXEKXl coveralls
@@ -51,4 +52,3 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-          
