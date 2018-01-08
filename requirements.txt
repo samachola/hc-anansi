@@ -28,7 +28,6 @@ pylint==1.8.1
 rcssmin==1.0.6
 >>>>>>> [#154015751:Chore] Implemented a precommit hook that checks if all tests are passing and code is properly linted to Flake8 standards
 rcssmin==1.0.6
-rcssmin==1.0.6
 requests==2.9.1
 rjsmin==1.0.12
 six==1.11.0
