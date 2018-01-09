@@ -1,0 +1,13 @@
+#!/bin/sh
+flake8 .
+
+
+`python manage.py test --pattern="test_*.py"`
+if [[ $? == 0 ]]
+then
+    echo "> Sorry! Your Tests DID NOT pass. :( "
+    exit 1 
+fi
+
+echo "Ready to commit"
+exit 0
