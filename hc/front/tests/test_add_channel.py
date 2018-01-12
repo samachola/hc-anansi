@@ -60,7 +60,7 @@ class AddChannelTestCase(BaseTestCase):
         # Bad kinds means that a user can't add unsupported intergrations.
         self.client.login(username="alice@example.org")
         bad_kind = "whatsapp"
-        url = reverse('hc-add-%s'%bad_kind)
+        url = "/integrations/add_%s" % bad_kind
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
