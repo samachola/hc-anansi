@@ -1,4 +1,5 @@
 from django.test.utils import override_settings
+from django.urls import reverse
 
 from hc.api.models import Channel
 from hc.test import BaseTestCase
@@ -32,14 +33,15 @@ class AddChannelTestCase(BaseTestCase):
     def test_instructions_work(self):
         self.client.login(username="alice@example.org", password="password")
         kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops")
-        for frag in kinds:
-            url = "/integrations/add_%s/" % frag
-            r = self.client.get(url)
-            self.assertContains(r, "Integration Settings", status_code=200)
+        for kind in kinds:
+            url = reverse('hc-add-%s'%kind)
+            response = self.client.get(url)
+            self.assertContains(response, "Integration Settings", status_code=200)
 
     ### Test that the team access works
     def test_teamaccess_works(self):
-        url = "/integrations/add/"
+        
+        url = reverse('hc-add-channel')
         form = {"kind": "email", "value": "alice@example.com"}
 
         self.client.login(username="alice@example.org", password="password")
@@ -48,20 +50,18 @@ class AddChannelTestCase(BaseTestCase):
         self.client.logout()
 
         self.client.login(username="bob@example.org", password="password")
-        r = self.client.get("/integrations/")
-        self.assertContains(r, alice_channels.first().code)
-        self.assertEquals(r.status_code, 200)
-
+        response = self.client.get(reverse('hc-channels'))
+        self.assertContains(response, alice_channels.first().code)
+        self.assertEquals(response.status_code, 200)
 
 
     ### Test that bad kinds don't work
     def test_bad_kinds_dont_work(self):
         # Bad kinds means that a user can't add unsupported intergrations.
         self.client.login(username="alice@example.org")
-        bad_kinds = ("whatsapp", "facebook", "linkedin")
-        for frag in bad_kinds:
-            url = "/integrations/add_%s/" % frag
-            r = self.client.get(url)
-            self.assertEqual(r.status_code, 404)
+        bad_kind = "whatsapp"
+        url = reverse('hc-add-%s'%bad_kind)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
 
