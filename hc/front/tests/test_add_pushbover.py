@@ -46,6 +46,6 @@ class AddPushoverTestCase(BaseTestCase):
         session["po_nonce"] = "n"
         session.save()
 
-        url = "%s?pushover_user_key=a&nonce=n&prio=13" % reverse('hc-add-pushover')
-        response = self.client.get(url)
+        params = "pushover_user_key=a&nonce=n&prio=13"
+        response = self.client.get(reverse('hc-add-pushover') + "?%s" % params)
         assert response.status_code == 400
