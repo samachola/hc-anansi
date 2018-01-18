@@ -1,6 +1,7 @@
 import json
 from django.urls import reverse
 from hc.api.models import Channel, Check
+from hc.api import views
 from hc.test import BaseTestCase
 
 
