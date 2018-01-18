@@ -1,15 +1,15 @@
-$(function () {
+$(function() {
 
-    var MINUTE = {name: "minute", nsecs: 60};
-    var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
-    var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
-    var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
+    var MINUTE = { name: "minute", nsecs: 60 };
+    var HOUR = { name: "hour", nsecs: MINUTE.nsecs * 60 };
+    var DAY = { name: "day", nsecs: HOUR.nsecs * 24 };
+    var WEEK = { name: "week", nsecs: DAY.nsecs * 7 };
     var UNITS = [WEEK, DAY, HOUR, MINUTE];
 
     var secsToText = function(total) {
         var remainingSeconds = Math.floor(total);
         var result = "";
-        for (var i=0, unit; unit=UNITS[i]; i++) {
+        for (var i = 0, unit; unit = UNITS[i]; i++) {
             if (unit === WEEK && remainingSeconds % unit.nsecs != 0) {
                 // Say "8 days" instead of "1 week 1 day"
                 continue
@@ -87,6 +87,34 @@ $(function () {
         $("#update-timeout-grace").val(rounded);
     });
 
+    // Nag slider setup
+    var nagSlider = document.getElementById("nag-slider");
+    noUiSlider.create(nagSlider, {
+        start: [20],
+        connect: "lower",
+        range: {
+            'min': [60, 60],
+            '33%': [3600, 3600],
+            '66%': [86400, 86400],
+            '83%': [604800, 604800],
+            'max': 2592000,
+        },
+        pips: {
+            mode: 'values',
+            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            density: 4,
+            format: {
+                to: secsToText,
+                from: function() {}
+            }
+        }
+    });
+
+    nagSlider.noUiSlider.on("update", function(a, b, value) {
+        var rounded = Math.round(value);
+        $("#nag-slider-value").text(secsToText(rounded));
+        $("#update-timeout-nag").val(rounded);
+    });
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -106,9 +134,10 @@ $(function () {
         var $this = $(this);
 
         $("#update-timeout-form").attr("action", $this.data("url"));
-        periodSlider.noUiSlider.set($this.data("timeout"))
-        graceSlider.noUiSlider.set($this.data("grace"))
-        $('#update-timeout-modal').modal({"show":true, "backdrop":"static"});
+        periodSlider.noUiSlider.set($this.data("timeout"));
+        graceSlider.noUiSlider.set($this.data("grace"));
+        nagSlider.noUiSlider.set($this.data("nag"));
+        $('#update-timeout-modal').modal({ "show": true, "backdrop": "static" });
 
         return false;
     });
@@ -144,7 +173,7 @@ $(function () {
 
         function applyFilters(index, element) {
             var tags = $(".my-checks-name", element).data("tags").split(" ");
-            for (var i=0, tag; tag=checked[i]; i++) {
+            for (var i = 0, tag; tag = checked[i]; i++) {
                 if (tags.indexOf(tag) == -1) {
                     $(element).hide();
                     return;
