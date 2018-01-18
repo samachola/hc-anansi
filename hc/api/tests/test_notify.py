@@ -223,3 +223,47 @@ class NotifyTestCase(BaseTestCase):
         self.assertEqual(json["message_type"], "CRITICAL")
 
     ### Test that the web hooks handle connection errors and error 500s
+    @patch("hc.api.transports.requests.request")
+    def test_webhook_handles_500(self, mock_post):
+        """Test webhooks handle a 500 status code"""
+        # set webhook as the kind and set the value to a url
+        self._setup_data("webhook", "http://error")
+        # mock a 500 status code
+        mock_post.return_value.status_code = 500
+
+        # create a notification
+        self.channel.notify(self.check)
+        # query notifications from db
+        notification = Notification.objects.get()
+        # assert notification error
+        self.assertEqual(notification.error, "Received status code 500")
+
+    @patch("hc.api.transports.requests.request")
+    def test_webhook_handles_502(self, mock_post):
+        """Test webhooks handle a 502 status code"""
+        # set webhook as the kind and set the value to a url
+        self._setup_data("webhook", "http://error")
+        # mock a 502 status code
+        mock_post.return_value.status_code = 502
+
+        # create a notification
+        self.channel.notify(self.check)
+        # query notifications from db
+        notification = Notification.objects.get()
+        # assert notification error
+        self.assertEqual(notification.error, "Received status code 502")
+
+    @patch("hc.api.transports.requests.request")
+    def test_webhook_handles_503(self, mock_post):
+        """Test webhooks handle a 503 status code"""
+        # set webhook as the kind and set the value to a url
+        self._setup_data("webhook", "http://error")
+        # mock a 503 status code
+        mock_post.return_value.status_code = 503
+
+        # create a notification
+        self.channel.notify(self.check)
+        # query notifications from db
+        notification = Notification.objects.get()
+        # assert notification error
+        self.assertEqual(notification.error, "Received status code 503")
