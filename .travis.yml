@@ -8,8 +8,6 @@ env:
 - DB=sqlite
 - DB=mysql
 - DB=postgres
-- EMAIL_HOST_USER=anansihc@gmail.com
-- EMAIL_HOST_PASSWORD=hc@naNs1
 addons:
   postgresql: '9.4'
 script:
