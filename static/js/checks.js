@@ -91,7 +91,7 @@ $(function() {
     var nagSlider = document.getElementById("nag-slider");
     noUiSlider.create(nagSlider, {
         start: [20],
-        connect: "lower",
+        connect: 'lower',
         range: {
             'min': [60, 60],
             '33%': [3600, 3600],
@@ -173,12 +173,12 @@ $(function() {
 
         function applyFilters(index, element) {
             var tags = $(".my-checks-name", element).data("tags").split(" ");
-            for (var i = 0, tag; tag = checked[i]; i++) {
-                if (tags.indexOf(tag) == -1) {
+            $.each(checked, function(key, value) {
+                if (key == -1) {
                     $(element).hide();
                     return;
                 }
-            }
+            });
 
             $(element).show();
         }
@@ -224,8 +224,6 @@ $(function() {
 
     clipboard.on('error', function(e) {
         var text = e.trigger.getAttribute("data-clipboard-text");
-        prompt("Press Ctrl+C to select:", text)
+        prompt("Press Ctrl+C to select:", text);
     });
-
-
 });
