@@ -22,6 +22,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'hc-anansi-staging.herokuapp.com',
                  'hc-anansi-production.herokuapp.com',
                  'hc-ibutiti.herokuapp.com']
+<<<<<<< HEAD
+=======
+
+>>>>>>> d99bc4de2b03eb94c72163840707e5924225d9da
 USE_PAYMENTS = False
 
 
