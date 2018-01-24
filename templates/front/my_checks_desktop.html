@@ -77,28 +77,32 @@
                         <span class="icon-settings" aria-hidden="true"></span>
                         </button>
                             <ul class="dropdown-menu">
-                                <li {% if check.status=="new" or check.status=="paused" %}class="disabled" {% endif %}>
-                                    <a class="pause-check" href="#" data-url="{% url 'hc-pause' check.code %}">
+                                {% if check.status == 'new' or check.status == 'paused' %}
+                                <li class="disabled">
+                                    {% else %}
+                                    <li>
+                                        {% endif %}
+                                        <a class="pause-check" href="#" data-url="{% url 'hc-pause' check.code %}">
                                    Pause Monitoring
                                 </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="{% url 'hc-log' check.code %}">
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'hc-log' check.code %}">
                                     Log
                                 </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="usage-examples" data-url="{{ check.url }}" data-email="{{ check.email }}">
+                                    </li>
+                                    <li>
+                                        <a href="#" class="usage-examples" data-url="{{ check.url }}" data-email="{{ check.email }}">
                                     Usage Examples
                                 </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="#" class="check-menu-remove" data-name="{{ check.name_then_code }}" data-url="{% url 'hc-remove-check' check.code %}">
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="#" class="check-menu-remove" data-name="{{ check.name_then_code }}" data-url="{% url 'hc-remove-check' check.code %}">
                                     Remove
                                 </a>
-                                </li>
+                                    </li>
                             </ul>
                         </div>
                     </td>
@@ -170,28 +174,32 @@
                         <span class="icon-settings" aria-hidden="true"></span>
                         </button>
                             <ul class="dropdown-menu">
-                                <li {% if check.status=="new" or check.status=="paused" %}class="disabled" {% endif %}>
-                                    <a class="pause-check" href="#" data-url="{% url 'hc-pause' check.code %}">
+                                {% if check.status == 'new' or check.status == 'paused' %}
+                                <li class="disabled">
+                                    {% else %}
+                                    <li>
+                                        {% endif %}
+                                        <a class="pause-check" href="#" data-url="{% url 'hc-pause' check.code %}">
                                    Pause Monitoring
                                 </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="{% url 'hc-log' check.code %}">
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'hc-log' check.code %}">
                                     Log
                                 </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="usage-examples" data-url="{{ check.url }}" data-email="{{ check.email }}">
+                                    </li>
+                                    <li>
+                                        <a href="#" class="usage-examples" data-url="{{ check.url }}" data-email="{{ check.email }}">
                                     Usage Examples
                                 </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="#" class="check-menu-remove" data-name="{{ check.name_then_code }}" data-url="{% url 'hc-remove-check' check.code %}">
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="#" class="check-menu-remove" data-name="{{ check.name_then_code }}" data-url="{% url 'hc-remove-check' check.code %}">
                                     Remove
                                 </a>
-                                </li>
+                                    </li>
                             </ul>
                         </div>
                     </td>
