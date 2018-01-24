@@ -113,7 +113,7 @@ class CreateCheckTestCase(BaseTestCase):
         """
         response = self.client.post(
             reverse('hc-api-checks'),
-            json.dumps({"api_key": "abc", "timeout": 605000}),
+            json.dumps({"api_key": "abc", "timeout": 10000000000}),
             content_type="application/json"
         )
         response_payload = response.json()
