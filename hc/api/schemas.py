@@ -1,5 +1,5 @@
 min_time = 60
-max_time = 604800
+max_time = 5184000
 check = {
     "properties": {
         "name": {"type": "string"},

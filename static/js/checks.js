@@ -32,14 +32,14 @@ $(function() {
     }
 
     //global scale values
-    durationA = 60
-    durationB = 1800
-    durationC = 3600
-    durationD = 43200
-    durationE = 86400
-    durationF = 604800
-    durationG = 2592000
-    durationH = 5184000
+    durationA = 60;
+    durationB = 1800;
+    durationC = 3600;
+    durationD = 43200;
+    durationE = 86400;
+    durationF = 604800;
+    durationG = 2592000;
+    durationH = 5184000;
 
     //function that constructs the slider for period timeouts
     var periodSlider = document.getElementById("period-slider");
