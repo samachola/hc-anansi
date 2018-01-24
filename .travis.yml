@@ -8,6 +8,12 @@ env:
 - DB=sqlite
 - DB=mysql
 - DB=postgres
+services:
+  - mysql
+  - postgresql
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS hc;'
+  - psql -c 'create database hc;' -U postgres
 addons:
   postgresql: '9.4'
 script:
