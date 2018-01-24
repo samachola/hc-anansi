@@ -14,7 +14,7 @@ class UpdateTimeoutTestCase(BaseTestCase):
         
         period = 5184000
         url = "/checks/%s/timeout/" % self.check.code
-        payload = {"timeout": period , "grace": period}
+        payload = {"timeout": period , "grace": period, "nag": period }
 
         self.client.login(username="alice@example.org", password="password")
         test = self.client.post(url, data=payload)

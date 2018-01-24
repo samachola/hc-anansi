@@ -20,15 +20,15 @@
     width: 100px;
     text-align: left;
     white-space: nowrap;
-
 }
 
-#period-slider {
+#period-slider,
+#nag-slider {
     margin: 20px 50px 80px 50px;
 }
 
 #period-slider.noUi-connect {
-  background: #22bc66;
+    background: #22bc66;
 }
 
 #grace-slider {
@@ -36,10 +36,12 @@
 }
 
 #grace-slider.noUi-connect {
-  background: #f0ad4e;
+    background: #f0ad4e;
 }
 
-#period-slider .noUi-value, #grace-slider .noUi-value {
+#period-slider .noUi-value,
+#grace-slider .noUi-value,
+#nag-slider .noUi-value {
     width: 60px;
     margin-left: -30px;
 }
@@ -52,7 +54,6 @@
     margin: 0;
 }
 
-
 .update-timeout-terms span {
     font-weight: bold;
 }
@@ -63,11 +64,10 @@
     font-style: normal;
 }
 
+#show-usage-modal .modal-dialog {
+    width: 1100px;
+}
 
-#show-usage-modal  .modal-dialog {
-     width: 1100px;
- }
-
- #show-usage-modal .tab-content {
-     margin-top: 15px;
- }
+#show-usage-modal .tab-content {
+    margin-top: 15px;
+}

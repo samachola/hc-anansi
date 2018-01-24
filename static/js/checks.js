@@ -1,16 +1,16 @@
-$(function () {
+$(function() {
 
-    var MINUTE = {name: "minute", nsecs: 60};
-    var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
-    var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
-    var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
-    var MONTH = {name: "month", nsecs: (WEEK.nsecs * 4) + (DAY.nsecs*2)};
+    var MINUTE = { name: "minute", nsecs: 60 };
+    var HOUR = { name: "hour", nsecs: MINUTE.nsecs * 60 };
+    var DAY = { name: "day", nsecs: HOUR.nsecs * 24 };
+    var WEEK = { name: "week", nsecs: DAY.nsecs * 7 };
+    var MONTH = { name: "month", nsecs: (WEEK.nsecs * 4) + (DAY.nsecs * 2) };
     var UNITS = [MONTH, WEEK, DAY, HOUR, MINUTE];
 
     var secsToText = function(total) {
         var remainingSeconds = Math.floor(total);
         var result = "";
-        for (var i=0, unit; unit=UNITS[i]; i++) {
+        for (var i = 0, unit; unit = UNITS[i]; i++) {
             if (unit === WEEK && remainingSeconds % unit.nsecs != 0) {
                 // Say "8 days" instead of "1 week 1 day"
                 continue
@@ -32,15 +32,15 @@ $(function () {
     }
 
     //global scale values
-    durationA = 60
-    durationB = 1800
-    durationC = 3600
-    durationD = 43200
-    durationE = 86400
-    durationF = 604800
-    durationG = 2592000
-    durationH = 5184000
-    
+    durationA = 60;
+    durationB = 1800;
+    durationC = 3600;
+    durationD = 43200;
+    durationE = 86400;
+    durationF = 604800;
+    durationG = 2592000;
+    durationH = 5184000;
+
     //function that constructs the slider for period timeouts
     var periodSlider = document.getElementById("period-slider");
     noUiSlider.create(periodSlider, {
@@ -56,10 +56,11 @@ $(function () {
         pips: {
             mode: 'values',
             values: [durationA, durationB, durationC, durationD,
-                     durationE, durationG, durationH],
+                durationE, durationG, durationH
+            ],
             density: 4,
             format: {
-                to: secsToText, 
+                to: secsToText,
                 from: function() {}
             }
         }
@@ -67,7 +68,7 @@ $(function () {
 
     periodSlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
-        $("#period-slider-value").text(secsToText(rounded)); 
+        $("#period-slider-value").text(secsToText(rounded));
         $("#update-timeout-timeout").val(rounded);
     });
 
@@ -86,7 +87,8 @@ $(function () {
         pips: {
             mode: 'values',
             values: [durationA, durationB, durationC, durationD,
-                     durationE, durationG, durationH],
+                durationE, durationG, durationH
+            ],
             density: 4,
             format: {
                 to: secsToText,
@@ -97,10 +99,41 @@ $(function () {
 
     graceSlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
-        $("#grace-slider-value").text(secsToText(rounded)); 
+        $("#grace-slider-value").text(secsToText(rounded));
         $("#update-timeout-grace").val(rounded);
     });
 
+    // Nag slider setup
+    var nagSlider = document.getElementById("nag-slider");
+    noUiSlider.create(nagSlider, {
+        start: [20],
+        connect: 'lower',
+        range: {
+            'min': [durationA, durationA],
+            '33%': [durationC, durationC],
+            '66%': [durationE, durationE],
+            '72%': [durationF, durationF],
+            'max': durationH,
+        },
+        pips: {
+            mode: 'values',
+            values: [
+                durationA, durationB, durationC, durationD,
+                durationE, durationG, durationH
+            ],
+            density: 4,
+            format: {
+                to: secsToText,
+                from: function() {}
+            }
+        }
+    });
+
+    nagSlider.noUiSlider.on("update", function(a, b, value) {
+        var rounded = Math.round(value);
+        $("#nag-slider-value").text(secsToText(rounded));
+        $("#update-timeout-nag").val(rounded);
+    });
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -120,9 +153,10 @@ $(function () {
         var $this = $(this);
 
         $("#update-timeout-form").attr("action", $this.data("url"));
-        periodSlider.noUiSlider.set($this.data("timeout"))
-        graceSlider.noUiSlider.set($this.data("grace"))
-        $('#update-timeout-modal').modal({"show":true, "backdrop":"static"});
+        periodSlider.noUiSlider.set($this.data("timeout"));
+        graceSlider.noUiSlider.set($this.data("grace"));
+        nagSlider.noUiSlider.set($this.data("nag"));
+        $('#update-timeout-modal').modal({ "show": true, "backdrop": "static" });
 
         return false;
     });
@@ -180,12 +214,12 @@ $(function () {
 
         function applyFilters(index, element) {
             var tags = $(".my-checks-name", element).data("tags").split(" ");
-            for (var i=0, tag; tag=checked[i]; i++) {
-                if (tags.indexOf(tag) == -1) {
+            $.each(checked, function(key, value) {
+                if (key == -1) {
                     $(element).hide();
                     return;
                 }
-            }
+            });
 
             $(element).show();
         }
@@ -218,7 +252,7 @@ $(function () {
 
         function applyFilters(index, element) {
             var tags = $(".my-checks-name", element).data("tags").split(" ");
-            for (var i=0, tag; tag=checked[i]; i++) {
+            for (var i = 0, tag; tag = checked[i]; i++) {
                 if (tags.indexOf(tag) == -1) {
                     $(element).hide();
                     return;
@@ -269,8 +303,6 @@ $(function () {
 
     clipboard.on('error', function(e) {
         var text = e.trigger.getAttribute("data-clipboard-text");
-        prompt("Press Ctrl+C to select:", text)
+        prompt("Press Ctrl+C to select:", text);
     });
-
-
 });
