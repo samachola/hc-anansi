@@ -1,15 +1,12 @@
+min_time = 60
+max_time = 604800
 check = {
     "properties": {
         "name": {"type": "string"},
         "tags": {"type": "string"},
-<<<<<<< HEAD
-        "timeout": {"type": "number", "minimum": 60, "maximum": 604800},
-        "grace": {"type": "number", "minimum": 60, "maximum": 604800},
-        "nag": {"type": "number", "minimum": 60, "maximum": 604800},
-=======
-        "timeout": {"type": "number", "minimum": 60, "maximum": 5184000},
-        "grace": {"type": "number", "minimum": 60, "maximum": 5184000},
->>>>>>> develop
+        "timeout": {"type": "number", "minimum": min_time, "maximum": max_time},
+        "grace": {"type": "number", "minimum": min_time, "maximum": max_time},
+        "nag": {"type": "number", "minimum": min_time, "maximum": max_time},
         "channels": {"type": "string"}
     }
 }
