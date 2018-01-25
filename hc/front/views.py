@@ -31,11 +31,16 @@ def pairwise(iterable):
 def my_checks(request):
     q = Check.objects.filter(user=request.team.user).order_by("created")
     checks = list(q)
+    # create a list of unresolved checks
+    unresolved_checks = []
 
     counter = Counter()
     down_tags, grace_tags = set(), set()
     for check in checks:
         status = check.get_status()
+        if status == "down":
+            # add checks with status down to unresolved checks list
+            unresolved_checks.append(check)
         for tag in check.tags_list():
             if tag == "":
                 continue
@@ -51,6 +56,8 @@ def my_checks(request):
         "page": "checks",
         "checks": checks,
         "now": timezone.now(),
+        # pass unresolved checks list to context
+        "unresolved_checks": unresolved_checks,
         "tags": counter.most_common(),
         "down_tags": down_tags,
         "grace_tags": grace_tags,
@@ -164,6 +171,7 @@ def update_timeout(request, code):
     if form.is_valid():
         check.timeout = td(seconds=form.cleaned_data["timeout"])
         check.grace = td(seconds=form.cleaned_data["grace"])
+        check.nag = td(seconds=form.cleaned_data["nag"])
         check.save()
 
     return redirect("hc-checks")
