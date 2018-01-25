@@ -135,8 +135,6 @@ $(function() {
         $("#update-timeout-nag").val(rounded);
     });
 
-
-
     $('[data-toggle="tooltip"]').tooltip();
 
     $(".my-checks-name").click(function() {
