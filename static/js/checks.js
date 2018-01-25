@@ -341,7 +341,9 @@ $(function() {
 
     // Gets the list of emails set for escalations.
     var escalationList = [];
-
+    $('#escalation-emails').tagsInput({
+        'defaultText': 'Email'
+    });
     $("#escalate").click(function() {
         var newArr = Array(document.getElementById('escalation-emails').value.split(','));
         escalationList.push(newArr);
