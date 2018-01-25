@@ -135,6 +135,8 @@ $(function() {
         $("#update-timeout-nag").val(rounded);
     });
 
+
+
     $('[data-toggle="tooltip"]').tooltip();
 
     $(".my-checks-name").click(function() {
@@ -304,5 +306,55 @@ $(function() {
     clipboard.on('error', function(e) {
         var text = e.trigger.getAttribute("data-clipboard-text");
         prompt("Press Ctrl+C to select:", text);
+    });
+
+    // Shows set priority modal
+    $(".job-priorities").click(function() {
+        var $this = $(this);
+
+        $("set-priority-form").attr("action", $this.data("url"));
+        prioritySlider.noUiSlider.set($this.data("priority"));
+        $('#set-priority-modal').modal({ "show": true, "backdrop": "static" });
+        return false;
+    });
+
+    // Sets priority slider
+    var prioritySlider = document.getElementById("priority-slider");
+    noUiSlider.create(prioritySlider, {
+        start: [0],
+        connect: 'lower',
+        range: {
+            'min': -2,
+            'max': 2
+        },
+        pips: {
+            mode: 'values',
+            values: [-2, -1, 0, 1, 2],
+            density: 15
+        }
+
+    });
+
+    prioritySlider.noUiSlider.on("update", function(a, b, value) {
+        var rounded = Math.round(value);
+        $("#priority-slider-value").text(rounded);
+        $("#job-priority").val(rounded);
+    });
+
+    // Gets the list of emails set for escalations.
+    var escalationList = [];
+
+    $("#escalate").click(function() {
+        var newArr = Array(document.getElementById('escalation-emails').value.split(','));
+        escalationList.push(newArr);
+        $("#escalation-emails").val('');
+        console.log(escalationList);
+        esc = '<hr>';
+        $.each(escalationList, function(key, value) {
+            $.each(value, function(key, val) {
+                esc += "<li class='esc-item'>" + val + "</li>";
+            });
+        });
+        $(".escalation-list").html(esc);
     });
 });
