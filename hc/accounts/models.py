@@ -12,7 +12,6 @@ from django.urls import reverse
 from django.utils import timezone
 from hc.lib import emails
 
-
 class Profile(models.Model):
     # Owner:
     user = models.OneToOneField(User, blank=True, null=True)
@@ -55,8 +54,16 @@ class Profile(models.Model):
 
     def send_report(self):
         # reset next report date first:
+        days = 0
+        if self.reports_allowed == 'Daily':
+            days = 1
+        elif self.reports_allowed == 'Weekly':
+            days = 7
+        elif self.reports_allowed == 'Monthly':
+            days = 30
+
         now = timezone.now()
-        self.next_report_date = now + timedelta(days=30)
+        self.next_report_date = now + timedelta(days=days)
         self.save()
 
         token = signing.Signer().sign(uuid.uuid4())
@@ -66,7 +73,8 @@ class Profile(models.Model):
         ctx = {
             "checks": self.user.check_set.order_by("created"),
             "now": now,
-            "unsub_link": unsub_link
+            "unsub_link": unsub_link,
+            "duration": self.reports_allowed
         }
 
         emails.report(self.user.email, ctx)
