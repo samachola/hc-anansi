@@ -349,9 +349,10 @@ $(function() {
         escalationList.push(newArr);
         $("#escalation-emails").val('');
         console.log(escalationList);
-        esc = '<hr>';
+        esc = '';
         $.each(escalationList, function(key, value) {
             $.each(value, function(key, val) {
+                esc += '<hr>';
                 esc += "<li class='esc-item'>" + val + "</li>";
             });
         });
