@@ -275,6 +275,12 @@ $(function() {
         return false;
     });
 
+    $(".check-priority").click(function(e) {
+        var url = e.target.getAttribute("data-url");
+        $("#set-priority-form").attr("action", url);
+        return false;
+    });
+
 
     $(".usage-examples").click(function(e) {
         var a = e.target;
@@ -307,12 +313,23 @@ $(function() {
     });
 
     // Shows set priority modal
-    $(".job-priorities").click(function() {
+    $(".check-priority").click(function(e) {
         var $this = $(this);
+        var a = e.target;
+        var priority = a.getAttribute("data-priority");
+        var emails = a.getAttribute("data-escal-emails");
+        console.log(priority, emails)
 
-        $("set-priority-form").attr("action", $this.data("url"));
-        prioritySlider.noUiSlider.set($this.data("priority"));
-        $('#set-priority-modal').modal({ "show": true, "backdrop": "static" });
+        $("#escalation-emails_tag").val(emails);
+        $("#check-priority").val(priority);
+        if($("#check-priority").val() === 1){
+            console.log("val = 1")
+           $("#check-priority-toggle").bootstrapToggle('High');
+        }else{
+            console.log("val = 0")
+           $("#check-priority-toggle").bootstrapToggle('Low');
+        }
+        $("#set-priority-modal").modal({ "show": true, "backdrop": "static" });
         return false;
     });
 
@@ -336,26 +353,33 @@ $(function() {
     prioritySlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
         $("#priority-slider-value").text(rounded);
-        $("#job-priority").val(rounded);
+        //$("#check-priority").val(rounded);
     });
 
     // Gets the list of emails set for escalations.
-    var escalationList = [];
+    // var escalationList = [];
     $('#escalation-emails').tagsInput({
         'defaultText': 'Email'
     });
     $("#escalate").click(function() {
-        var newArr = Array(document.getElementById('escalation-emails').value.split(','));
-        escalationList.push(newArr);
-        $("#escalation-emails").val('');
-        console.log(escalationList);
-        esc = '';
-        $.each(escalationList, function(key, value) {
-            $.each(value, function(key, val) {
-                esc += '<hr>';
-                esc += "<li class='esc-item'>" + val + "</li>";
-            });
-        });
-        $(".escalation-list").html(esc);
+        // var newArr = Array(document.getElementById('escalation-emails').value.split(','));
+        // escalationList.push(newArr);
+        //$("#escalation-emails").val('');
+        console.log(document.getElementById('escalation-emails').value);
+        // esc = '';
+        // $.each(escalationList, function(key, value) {
+        //     $.each(value, function(key, val) {
+        //         esc += '<hr>';
+        //         esc += "<li class='esc-item'>" + val + "</li>";
+        //     });
+        // });
+        // $(".escalation-list").html(esc);
+    });
+    $("#check-priority-toggle").change(function(){
+        if($(this).prop("checked")){
+           $("#check-priority").val(1);
+        }else{
+           $("#check-priority").val(0);
+        }
     });
 });

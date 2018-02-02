@@ -49,13 +49,26 @@ class Command(BaseCommand):
             check.nag_status = True
 
         check.save()
-            
+
+        if check.status == "down" and check.priority == 1:
+            self.escalate_email(check)
 
         tmpl = "\nSending alert, status=%s, code=%s\n"
         self.stdout.write(tmpl % (check.status, check.code))
         errors = check.send_alert()
         for ch, error in errors:
             self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
+
+        connection.close()
+        return True
+
+    def escalate_email(self, check):
+        tmpl = "\nSending alert, status=%s, code=%s\n"
+        self.stdout.write(tmpl % (check.status, check.code))
+        errors = check.send_alert()
+        for ch, error in errors:
+            self.stdout.write("ERROR: %s %s %s\n" % (
+                'email', check.escalation_emails, error))
 
         connection.close()
         return True
