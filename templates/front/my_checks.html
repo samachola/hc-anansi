@@ -5,14 +5,6 @@
             {% if request.team == request.user.profile %} My Checks {% else %} {{ request.team.team_name }} {% endif %}
         </h1>
     </div>
-    {% if tags %}
-    <div id="my-checks-tags" class="col-sm-12">
-        {% for tag, count in tags %} {% if tag in down_tags %}
-        <button class="btn btn-danger btn-xs" data-toggle="button">{{ tag }}</button> {% elif tag in grace_tags %}
-        <button class="btn btn-warning btn-xs" data-toggle="button">{{ tag }}</button> {% else %}
-        <button class="btn btn-default btn-xs" data-toggle="button">{{ tag }}</button> {% endif %} {% endfor %}
-    </div>
-    {% endif %}
 
 </div>
 <div class="row">
@@ -149,23 +141,15 @@
         <form id="set-priority-form" method="post" action="">
             {% csrf_token %}
             <input type="hidden" name="priority" id="check-priority" />
+
             <div class="modal-content">
+                <div class="priority-modal-title">
+                    Set Check Priority and Escalation Email
+                </div>
                 <div class="modal-body">
-                    <div class="job-timeout-info text-center">
-                        <span class="update-priority-label" data-toggle="tooltip" title="Set job priority.">
-                                Priority
-                            </span>
-                        <span id="priority-slider-value" class="update-priority-value">
-                                0
-                            </span>
-                    </div>
-                    <div id="priority-slider"></div>
-                    <div class="escalation-list"></div>
-                    <span class="escalation-emails-label" data-toggle="tooltip" title="Enter email(s) to escalate notifications to when a job goes down and is not resolved.">
-                        Escalation Email Addresses</span>
                     <div class="escalation">
                         <input type="checkbox" id="check-priority-toggle" checked data-toggle="toggle" data-style="check-priority-toggle-x" data-on="High" data-off="Low" data-onstyle="danger" data-width="30px">
-                        <select class="escalation-select" name="escalation_emails">
+                        <select class="escalation-select" id="escalation-select" name="escalation_email">
                             <option value="">select email</option>
                             {% for channel in channels %}
                             <option value="{{channel.value}}">
@@ -179,7 +163,7 @@
 
                         </select>
                         <!-- <input type="text" data-role="tagsinput" name="escalation_emails" id="escalation-emails" placeholder="Emails (Separated by commas)"> -->
-                        <button type="submit" id="escalate" class="btn btn-primary">Add</button>
+                        <button type="submit" id="escalate" class="btn btn-primary">Save</button>
                     </div>
 
                 </div>

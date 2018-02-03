@@ -50,25 +50,28 @@ class Command(BaseCommand):
 
         check.save()
 
-        if check.status == "down" and check.priority == 1:
+        if (check.status == "down" and check.priority == 1
+            and check.escalation_email):
             self.escalate_email(check)
+            print('Email escalated')
+        else:
+            print('Email not escalated')
+            tmpl = "\nSending alert, status=%s, code=%s\n"
+            self.stdout.write(tmpl % (check.status, check.code))
+            errors = check.send_alert()
+            for ch, error in errors:
+                self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
 
-        tmpl = "\nSending alert, status=%s, code=%s\n"
-        self.stdout.write(tmpl % (check.status, check.code))
-        errors = check.send_alert()
-        for ch, error in errors:
-            self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
-
-        connection.close()
-        return True
+            connection.close()
+            return True
 
     def escalate_email(self, check):
-        tmpl = "\nSending alert, status=%s, code=%s\n"
+        tmpl = "\nSending escalation alert, status=%s, code=%s\n"
         self.stdout.write(tmpl % (check.status, check.code))
-        errors = check.send_alert()
+        errors = check.send_escalation_alert(check.escalation_email)
         for ch, error in errors:
             self.stdout.write("ERROR: %s %s %s\n" % (
-                'email', check.escalation_emails, error))
+                'email', check.escalation_email, error))
 
         connection.close()
         return True
