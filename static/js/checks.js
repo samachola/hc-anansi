@@ -214,12 +214,12 @@ $(function() {
 
         function applyFilters(index, element) {
             var tags = $(".my-checks-name", element).data("tags").split(" ");
-            $.each(checked, function(key, value) {
-                if (key == -1) {
+            for (var i = 0, tag; tag = checked[i]; i++) {
+                if (tags.indexOf(tag) == -1) {
                     $(element).hide();
                     return;
                 }
-            });
+            }
 
             $(element).show();
         }
@@ -275,6 +275,12 @@ $(function() {
         return false;
     });
 
+    $(".check-priority").click(function(e) {
+        var url = e.target.getAttribute("data-url");
+        $("#set-priority-form").attr("action", url);
+        return false;
+    });
+
 
     $(".usage-examples").click(function(e) {
         var a = e.target;
@@ -307,16 +313,45 @@ $(function() {
     });
 
     // Shows set priority modal
-    $(".job-priorities").click(function() {
+    $(".check-priority").click(function(e) {
         var $this = $(this);
+        var a = e.target;
+        var priority = a.getAttribute("data-priority");
+        var emails = a.getAttribute("data-escal-emails");
+        $("#check-priority").val(priority);
+        $('#default-email').val(emails).attr("selected", "true");
+        $('#default-email').html(emails)
 
-        $("set-priority-form").attr("action", $this.data("url"));
-        prioritySlider.noUiSlider.set($this.data("priority"));
-        $('#set-priority-modal').modal({ "show": true, "backdrop": "static" });
+
+
+        $("#check-priority").val(priority);
+        if(priority === 1){
+            console.log('prior 1')
+           $("#check-priority-toggle").bootstrapToggle('on');
+        } else {
+            console.log('prior 0')
+           $("#check-priority-toggle").bootstrapToggle('off');
+           $(".escalation-select").prop('selectedIndex',0);
+           // $(".escalation-select").disable();
+        }
+        $("#set-priority-modal").modal({ "show": true, "backdrop": "static" });
         return false;
     });
 
-    // Sets priority slider
+
+    $("#check-priority-toggle").change(function(){
+        if($(this).prop("checked")){
+           $("#check-priority").val(1);
+           $("#escalation-select").val("");
+           $("#escalation-select").prop("disabled", false);
+        }else{
+           $("#check-priority").val(0);
+           $("#escalation-select").prop("selectedIndex",0);
+           $('#escalatin-select').prop("disabled", "disabled");
+        }
+    });
+
+    // Priority slider
     var prioritySlider = document.getElementById("priority-slider");
     noUiSlider.create(prioritySlider, {
         start: [0],
@@ -336,26 +371,6 @@ $(function() {
     prioritySlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
         $("#priority-slider-value").text(rounded);
-        $("#job-priority").val(rounded);
-    });
-
-    // Gets the list of emails set for escalations.
-    var escalationList = [];
-    $('#escalation-emails').tagsInput({
-        'defaultText': 'Email'
-    });
-    $("#escalate").click(function() {
-        var newArr = Array(document.getElementById('escalation-emails').value.split(','));
-        escalationList.push(newArr);
-        $("#escalation-emails").val('');
-        console.log(escalationList);
-        esc = '';
-        $.each(escalationList, function(key, value) {
-            $.each(value, function(key, val) {
-                esc += '<hr>';
-                esc += "<li class='esc-item'>" + val + "</li>";
-            });
-        });
-        $(".escalation-list").html(esc);
+        $("#check-priority").val(rounded);
     });
 });

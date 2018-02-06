@@ -49,16 +49,52 @@ class Command(BaseCommand):
             check.nag_status = True
 
         check.save()
-            
 
-        tmpl = "\nSending alert, status=%s, code=%s\n"
-        self.stdout.write(tmpl % (check.status, check.code))
-        errors = check.send_alert()
-        for ch, error in errors:
-            self.stdout.write("ERROR: %s %s %s\n" % (ch.kind, ch.value, error))
+        if not (check.status == "down" and check.priority > 0 and
+            check.escalation_email):
+            self.stdout.write('Email not escalated')
+            tmpl = "\nSending normal alert, status={}, code={}\n"
+            self.stdout.write(tmpl.format(check.status, check.code))
+            errors = check.send_alert()
+            for ch, error in errors:
+                self.stdout.write(("ERROR: {} {} {}\n").format(ch.kind,
+                                                               ch.value, error))
 
-        connection.close()
-        return True
+            connection.close()
+            return True
+        else:
+
+            tmpl = "\nSending escalation alert, status={}, code={}\n"
+            self.stdout.write(tmpl.format(check.status, check.code))
+            errors = check.send_escalation_alert(check.escalation_email)
+            for ch, error in errors:
+                self.stdout.write("ERROR: {} {} {}\n".format(
+                    'email', check.escalation_email, error))
+
+            connection.close()
+            self.stdout.write("Email notification escalated")
+
+            tmpl = "\nSending normal alert, status=%s, code=%s\n"
+            self.stdout.write(tmpl % (check.status, check.code))
+            errors = check.send_alert()
+            for ch, error in errors:
+                self.stdout.write(("ERROR: {} {} {}\n").format(ch.kind,
+                                                               ch.value, error))
+
+            connection.close()
+            return True
+
+
+    # def escalate_email(self, check):
+    #     tmpl = "\nSending escalation alert, status=%s, code=%s\n"
+    #     self.stdout.write(tmpl % (check.status, check.code))
+    #     errors = check.send_escalation_alert(check.escalation_email)
+    #     for ch, error in errors:
+    #         self.stdout.write("ERROR: %s %s %s\n" % (
+    #             'email', check.escalation_email, error))
+    #
+    #     connection.close()
+    #     return True
 
     def handle(self, *args, **options):
         self.stdout.write("sendalerts is now running")
