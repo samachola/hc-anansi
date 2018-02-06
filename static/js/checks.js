@@ -318,7 +318,11 @@ $(function() {
         var a = e.target;
         var priority = a.getAttribute("data-priority");
         var emails = a.getAttribute("data-escal-emails");
-        console.log(priority, emails)
+        $("#check-priority").val(priority);
+        $('#default-email').val(emails).attr("selected", "true");
+        $('#default-email').html(emails)
+
+
 
         $("#check-priority").val(priority);
         if(priority === 1){
@@ -345,5 +349,28 @@ $(function() {
            $("#escalation-select").prop("selectedIndex",0);
            $('#escalatin-select').prop("disabled", "disabled");
         }
+    });
+
+    // Priority slider
+    var prioritySlider = document.getElementById("priority-slider");
+    noUiSlider.create(prioritySlider, {
+        start: [0],
+        connect: 'lower',
+        range: {
+            'min': -2,
+            'max': 2
+        },
+        pips: {
+            mode: 'values',
+            values: [-2, -1, 0, 1, 2],
+            density: 15
+        }
+
+    });
+
+    prioritySlider.noUiSlider.on("update", function(a, b, value) {
+        var rounded = Math.round(value);
+        $("#priority-slider-value").text(rounded);
+        $("#check-priority").val(rounded);
     });
 });
