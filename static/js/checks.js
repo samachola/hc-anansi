@@ -318,37 +318,14 @@ $(function() {
         var a = e.target;
         var priority = a.getAttribute("data-priority");
         var emails = a.getAttribute("data-escal-emails");
-        $("#check-priority").val(priority);
-        $('#default-email').val(emails).attr("selected", "true");
-        $('#default-email').html(emails)
-
-
 
         $("#check-priority").val(priority);
-        if(priority === 1){
-            console.log('prior 1')
-           $("#check-priority-toggle").bootstrapToggle('on');
-        } else {
-            console.log('prior 0')
-           $("#check-priority-toggle").bootstrapToggle('off');
-           $(".escalation-select").prop('selectedIndex',0);
-           // $(".escalation-select").disable();
-        }
+        $("#default-email").val(emails).attr("selected", "true");
+        $("#default-email").html(emails);
+        prioritySlider.noUiSlider.set(priority);
+
         $("#set-priority-modal").modal({ "show": true, "backdrop": "static" });
         return false;
-    });
-
-
-    $("#check-priority-toggle").change(function(){
-        if($(this).prop("checked")){
-           $("#check-priority").val(1);
-           $("#escalation-select").val("");
-           $("#escalation-select").prop("disabled", false);
-        }else{
-           $("#check-priority").val(0);
-           $("#escalation-select").prop("selectedIndex",0);
-           $('#escalatin-select').prop("disabled", "disabled");
-        }
     });
 
     // Priority slider
